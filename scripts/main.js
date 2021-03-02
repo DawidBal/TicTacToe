@@ -3,13 +3,17 @@
      const gameBoard = (() => {
          
         // Privates
-        const _gameBoard = [
+        const gameBoard = [
              '', '', '',
              '', '', '',
              '', '', ''
          ];
 
-         const _board = document.querySelector('.gameBoard');
+         const board = document.querySelector('.gameBoard');
+
+         const isCellEmpty = (index) => {
+            return gameBoard[index].length < 1;
+         }
 
          const _addHighlight = (e) => {
              if (e.target.matches('.gameBoard__cell')) {
@@ -24,20 +28,20 @@
 
          }
 
-         _board.addEventListener('mouseover', _addHighlight);
-         _board.addEventListener('mouseout', _removeHightlight);
+         board.addEventListener('mouseover', _addHighlight);
+         board.addEventListener('mouseout', _removeHightlight);
         // Public
          const renderGameBoard = () => {
-            _board.innerHTML = _gameBoard.map(cell => {
+            board.innerHTML = gameBoard.map((cell, index) => {
             return(
                 `
-                <div class="gameBoard__cell">${cell}</div>
+                <div class="gameBoard__cell" data-index=${index}>${cell}</div>
                 `
             )}).join('');
          }
 
          // Returning
-         return { renderGameBoard }
+         return { gameBoard, board, renderGameBoard, isCellEmpty }
 
      })();
 
@@ -46,11 +50,24 @@
         const _mark = mark;
 
         const getName = () => _name;
+
+        function markCellBoard(e) {
+            e.preventDefault();
+            const cellIndex = e.target.dataset.index;
+            if(gameBoard.isCellEmpty(cellIndex))
+            {
+                gameBoard.gameBoard[cellIndex] = mark;
+                gameBoard.renderGameBoard();
+            }
+            
+        }
+
+        gameBoard.board.addEventListener('mousedown', markCellBoard);
         return { getName };
      }
 
      const gameController = (() => {
-
+         
      })();
 
      const options = (() => {
@@ -58,7 +75,7 @@
      })();
 
      const playerOne = Players('P1', 'X');
-     const playerTwo = Players('P2', 'O');
+    //  const playerTwo = Players('P2', 'O');
 
      gameBoard.renderGameBoard();
 
