@@ -11,13 +11,13 @@ const app = (() => {
         ];
 
         const _addHighlight = (e) => {
-            if (e.target.matches('.gameBoard__cell')) {
+            if (e.target.matches('.c-gameBoard__cell')) {
                 e.target.classList.add('highlight');
             }
         };
 
         const _removeHightlight = (e) => {
-            if (e.target.matches('.gameBoard__cell')) {
+            if (e.target.matches('.c-gameBoard__cell')) {
                 e.target.classList.remove('highlight');
             }
         };
@@ -27,28 +27,30 @@ const app = (() => {
 
         const resetGameBoard = () => { _gameBoard = _gameBoard.map(mark => mark = '') }
 
-        const board = document.querySelector('.gameBoard__board');
-        const turnInfo = document.querySelector('.gameBoard__result');
+        const board = document.querySelector('.c-gameBoard__board');
+        const turnInfo = document.querySelector('.c-gameBoard__result');
 
         const isCellEmpty = (index) => _gameBoard[index].length < 1;
 
         const renderGameBoard = () => {
             board.innerHTML = _gameBoard.map((cell, index) => {
                 return (
-                    `<div class="gameBoard__cell" data-index=${index}>${cell}</div>`
+                    `<div class="c-gameBoard__cell l-grid-center" data-index="${index}">${cell}</div>`
                 )
             }).join('');
         };
 
         const renderMark = (cellIndex) => {
-            document.querySelector(`[data-index="${cellIndex}"`).textContent = _gameBoard[cellIndex];
+            const mark = document.querySelector(`[data-index="${cellIndex}"`);
+            _gameBoard[cellIndex] === 'X' ? mark.classList.add('c-gameBoard__cell--firstPlayer') : mark.classList.add('c-gameBoard__cell--secondPlayer'); 
+            mark.textContent = _gameBoard[cellIndex];
         }
 
-        const renderTurn = (playerName) => turnInfo.textContent = `It's ${playerName} turn`;
+        const renderTurn = (playerName) => turnInfo.textContent = `Player's ${playerName} turn`;
 
-        const renderWinner = (playerName) => turnInfo.textContent = `${playerName} Won the game!`;
+        const renderWinner = (playerName) => turnInfo.textContent = `Player ${playerName} won the game!`;
 
-        const renderDraw = () => turnInfo.textContent = `It's a draw`;
+        const renderDraw = () => turnInfo.textContent = `Draw!`;
 
         // Events
         board.addEventListener('mouseover', _addHighlight);
@@ -87,15 +89,20 @@ const app = (() => {
 
         // Privates
         // Player Objects Initalizations
-        const playerOne = Players('P1', 'X');
-        const playerTwo = Players('P2', 'O');
+        const playerOne = Players(`One`, 'X');
+        const playerTwo = Players(`Two`, 'O');
+
+        const resetButton = document.querySelector('.c-gameBoard__restart');
+        const playerOneEl = document.querySelector('.js-firstPlayer');
+        const playerTwoEl = document.querySelector('.js-secondPlayer');
 
         gameBoard.renderGameBoard();
         gameBoard.renderTurn(playerOne.getName());
+        playerOneEl.classList.add('d-playerTurn');
 
         let board = gameBoard.getGameBoard();
 
-        const resetButton = document.querySelector('.gameBoard__restart');
+        
 
         const winningPattern = [
             [0, 1, 2],
@@ -144,6 +151,14 @@ const app = (() => {
         const changeTurn = () => {
             playerOne.changeTurn();
             playerTwo.changeTurn();
+
+            if (playerOne.getTurn()) {
+                playerTwoEl.classList.remove('d-playerTurn');
+                playerOneEl.classList.add('d-playerTurn');
+            } else {
+                playerTwoEl.classList.add('d-playerTurn');
+                playerOneEl.classList.remove('d-playerTurn');
+            }
         };
 
         const trimArray = (array) => {
@@ -196,7 +211,9 @@ const app = (() => {
             gameOver = false;
 
             playerOne.setTurn(true);
+            playerOneEl.classList.add('d-playerTurn');
             playerTwo.setTurn(false);
+            playerTwoEl.classList.remove('d-playerTurn');
             gameBoard.renderTurn(_getPlayerName());
 
         }
