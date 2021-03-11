@@ -194,6 +194,8 @@ body {
 }
 
 .c-gameBoard__options {
+  -ms-grid-column-align: stretch;
+      justify-self: stretch;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -228,6 +230,7 @@ body {
 }
 
 .c-player__img {
+  width: 7rem;
   padding: 1rem;
   margin-top: 1rem;
   border: 2px solid var(--white);
