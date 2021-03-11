@@ -3,3 +3,9 @@
   justify-content: center;
   align-items: center;
 }
+
+@mixin gridCenter {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
