@@ -28,7 +28,6 @@ const app = (() => {
         const resetGameBoard = () => { _gameBoard = _gameBoard.map(mark => mark = '') }
 
         const board = document.querySelector('.c-gameBoard__board');
-        const turnInfo = document.querySelector('.c-gameBoard__result');
 
         const isCellEmpty = (index) => _gameBoard[index].length < 1;
 
@@ -44,20 +43,14 @@ const app = (() => {
             const mark = document.querySelector(`[data-index="${cellIndex}"`);
             _gameBoard[cellIndex] === 'X' ? mark.classList.add('c-gameBoard__cell--firstPlayer') : mark.classList.add('c-gameBoard__cell--secondPlayer'); 
             mark.textContent = _gameBoard[cellIndex];
-        }
-
-        const renderTurn = (playerName) => turnInfo.textContent = `Player's ${playerName} turn`;
-
-        const renderWinner = (playerName) => turnInfo.textContent = `Player ${playerName} won the game!`;
-
-        const renderDraw = () => turnInfo.textContent = `Draw!`;
+        };
 
         // Events
         board.addEventListener('mouseover', _addHighlight);
         board.addEventListener('mouseout', _removeHightlight);
 
         // Returning
-        return { getGameBoard, board, renderGameBoard, isCellEmpty, renderMark, renderTurn, renderWinner, renderDraw, resetGameBoard }
+        return { getGameBoard, resetGameBoard, board, isCellEmpty, renderGameBoard, renderMark }
 
     })();
 
@@ -68,7 +61,6 @@ const app = (() => {
         // If you choosed 'X' mark, first turn is yours
         let _yourTurn = mark === 'X';
 
-
         // Public
         const changeTurn = () => _yourTurn = !_yourTurn;
 
@@ -77,8 +69,6 @@ const app = (() => {
         const getTurn = () => _yourTurn;
 
         const setTurn = (value) => { _yourTurn = value }; // Could use setter accessor in return, but for the sake of consistency used "pseudo" setter
-
-
 
         // Returning
         return { getName, getMark, getTurn, setTurn, changeTurn };
@@ -92,17 +82,14 @@ const app = (() => {
         const playerOne = Players(`One`, 'X');
         const playerTwo = Players(`Two`, 'O');
 
+        // DOM Elements
         const resetButton = document.querySelector('.c-gameBoard__restart');
         const playerOneEl = document.querySelector('.js-firstPlayer');
         const playerTwoEl = document.querySelector('.js-secondPlayer');
+        const turnInfo = document.querySelector('.c-gameBoard__result');
 
-        gameBoard.renderGameBoard();
-        gameBoard.renderTurn(playerOne.getName());
-        playerOneEl.classList.add('d-playerTurn');
-
+        // Gameboard ref
         let board = gameBoard.getGameBoard();
-
-        
 
         const winningPattern = [
             [0, 1, 2],
@@ -117,6 +104,19 @@ const app = (() => {
 
         let gameOver = false;
         let markIndex = [];
+
+        const renderPlayerName = (playerName) => {
+            return `<span class="${playerName === playerOne.getName() ? 
+                "c-gameBoard__cell--firstPlayer" : "c-gameBoard__cell--secondPlayer"}">${playerName}</span>`
+        }
+
+        const renderTurn = (playerName) => {
+            turnInfo.innerHTML = `Player's ${renderPlayerName(playerName)} turn`;
+        }
+
+        const renderWinner = (playerName) => turnInfo.innerHTML = `Player ${renderPlayerName(playerName)} won the game!`;
+
+        const renderDraw = () => turnInfo.textContent = `Draw!`;
 
         const markCellBoard = (e) => {
             if (gameOver) { return };
@@ -140,14 +140,15 @@ const app = (() => {
                 if (checkGameOver(playedMark)) { return }
 
                 changeTurn();
-                gameBoard.renderTurn(_getPlayerName());
+                renderTurn(_getPlayerName());
 
             }
         };
 
         const _getPlayerName = () => {
             return playerOne.getTurn() ? playerOne.getName() : playerTwo.getName()
-        }
+        };
+
         const changeTurn = () => {
             playerOne.changeTurn();
             playerTwo.changeTurn();
@@ -161,26 +162,29 @@ const app = (() => {
             }
         };
 
+        // Returns array without spaces
         const trimArray = (array) => {
-            return array.filter(item => !item.match(/^\s*$/));  // Return array without spaces
-        }
+            return array.filter(item => !item.match(/^\s*$/));  
+        };
 
+        // Returns array length of total played mark
         const getMarksInBoard = (mark) => {
-            return trimArray(board).filter(marks => marks === mark).length; // Return array length of played mark
-        }
+            return trimArray(board).filter(marks => marks === mark).length; 
+        };
 
         const checkMarkPattern = (mark) => {
-
             markIndex = [];
+            // Get all indexes of played mark in board
             board.forEach((item, index) => {
                 if (!item.match(/^\s*$/) && item === mark) {
                     markIndex.push(index);
                 }
             });
+            // Return true if indexes are equal one of the pattern
             return winningPattern.map((pattern) => {
                 return pattern.every(value => markIndex.includes(value));
             }).includes(true);
-        }
+        };
 
         const checkGameOver = (mark) => {
 
@@ -190,17 +194,17 @@ const app = (() => {
                 const isGameWon = checkMarkPattern(mark);
                 if (isGameWon) {
                     gameOver = true;
-                    gameBoard.renderWinner(_getPlayerName());
+                    renderWinner(_getPlayerName());
                     return gameOver;
                 }
             }
 
             if (trimArray(board).length >= board.length) {
                 gameOver = true;
-                gameBoard.renderDraw();
+                renderDraw();
                 return gameOver;
             }
-        }
+        };
 
         const resetGame = () => {
 
@@ -214,13 +218,18 @@ const app = (() => {
             playerOneEl.classList.add('d-playerTurn');
             playerTwo.setTurn(false);
             playerTwoEl.classList.remove('d-playerTurn');
-            gameBoard.renderTurn(_getPlayerName());
+            renderTurn(_getPlayerName());
 
-        }
+        };
 
         // Events
         resetButton.addEventListener('click', resetGame);
         gameBoard.board.addEventListener('mousedown', markCellBoard);
+
+        gameBoard.renderGameBoard();
+        renderTurn(playerOne.getName());
+        playerOneEl.classList.add('d-playerTurn');
+
     })();
 })
 
