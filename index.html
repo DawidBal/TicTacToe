@@ -15,7 +15,17 @@
 <body>
     
     <h1 class="c-title">Tic Tac Toe</h1>
-    <main class="l-flex-center d-gap1">
+    <div class="l-flex-center c-names">
+        <h2 class="c-title c-title--medium">Input player's names</h2>
+        <form action="" class="c-names__form l-flex-center d-gap1 js-namesForm">
+            <label for="playerOneName" class="c-names__name">Player One</label>
+            <input type="text" id="playerOneName" class="c-names__input c-names__input--firstPlayer js-firstPlayerName" required minlength="2">
+            <label for="playerTwoName" class="c-names__name">Player Two</label>
+            <input type="text" id="playerTwoName" class="c-names__input c-names__input--secondPlayer js-secondPlayerName" required minlength="2">
+            <input type="submit" value="Accept" class="c-btn">
+        </form>
+    </div>
+    <main class="d-invisible l-flex-center d-gap1">
         
         <section class="c-gameBoard l-grid l-gc3">
 
@@ -41,7 +51,6 @@
                 <button class="c-gameBoard__restart c-btn">Restart</button>
             </div>
         </section>
-
         
     </main>
 </body>

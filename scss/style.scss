@@ -58,26 +58,16 @@ body {
 .d-gap1 {
   gap: 1rem;
 }
+.d-invisible {
+  display: none;
+}
 
 .cls-1 {
   fill: var(--white);
 }
 
-.c-btn {
-  padding: 0.5rem 1rem;
-  border: 2px solid var(--secondaryColor);
-  border-radius: 10px;
-  background: var(--titleColor);
-  color: var(--secondaryColor);
-  box-shadow: 0 0.5rem var(--secondaryColor);
-  transition: transform 200ms ease-out;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-  &:active {
-    transform: scale(1);
-  }
+.d-playerTurn {
+  transform: scale(1.2);
 }
 
 .c-title {
@@ -88,6 +78,33 @@ body {
   font-size: clamp(4em, 5vw, 7rem);
   text-shadow: 0 0.5rem 0 var(--secondaryColor);
   color: var(--titleColor);
+
+  &--medium {
+    font-size: clamp(2em, 4vw, 3rem);
+    text-shadow: 0 0.3rem 0 var(--secondaryColor);
+  }
+}
+
+.c-names {
+  flex-direction: column;
+  &__form {
+    flex-direction: column;
+  }
+  &__name {
+    color: var(--white);
+    font-size: 1.25rem;
+  }
+  &__input {
+    border: 3px solid var(--secondaryColor);
+    border-radius: 5px;
+    padding: 0.25rem;
+    &--firstPlayer {
+      border-color: var(--firstPlayer);
+    }
+    &--secondPlayer {
+      border-color: var(--secondPlayer);
+    }
+  }
 }
 
 .c-gameBoard {
@@ -168,8 +185,22 @@ body {
   }
 }
 
-.d-playerTurn {
-  transform: scale(1.2);
+.c-btn {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--secondaryColor);
+  border-radius: 10px;
+  background: var(--titleColor);
+  color: var(--secondaryColor);
+  box-shadow: 0 0.5rem var(--secondaryColor);
+  transition: transform 200ms ease-out;
+  align-self: stretch;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+  &:active {
+    transform: scale(1);
+  }
 }
 
 @media screen and (max-width: 50rem) {

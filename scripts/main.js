@@ -65,13 +65,14 @@ const app = (() => {
         const changeTurn = () => _yourTurn = !_yourTurn;
 
         const getName = () => name;
+        const setName = (value) => name = value;
         const getMark = () => mark;
         const getTurn = () => _yourTurn;
 
         const setTurn = (value) => { _yourTurn = value }; // Could use setter accessor in return, but for the sake of consistency used "pseudo" setter
 
         // Returning
-        return { getName, getMark, getTurn, setTurn, changeTurn };
+        return { getName, getMark, getTurn, setTurn, setName, changeTurn };
     }
 
     // Game Controller Module
@@ -87,6 +88,7 @@ const app = (() => {
         const playerOneEl = document.querySelector('.js-firstPlayer');
         const playerTwoEl = document.querySelector('.js-secondPlayer');
         const turnInfo = document.querySelector('.c-gameBoard__result');
+        const namesForm = document.querySelector('.js-namesForm');
 
         // Gameboard ref
         let board = gameBoard.getGameBoard();
@@ -105,16 +107,55 @@ const app = (() => {
         let gameOver = false;
         let markIndex = [];
 
+        function startGame(e) {
+            e.preventDefault();
+            const firstPlayerName = this.querySelector('.js-firstPlayerName').value;
+            const secondPlayerName = this.querySelector('.js-secondPlayerName').value;
+            // If first player input contains only spaces, set default value
+            if (firstPlayerName.trim().length === 0 ) {
+                playerOne.setName('One');
+            } else {
+                playerOne.setName(firstPlayerName);
+                playerOneEl.querySelector('.c-player__name--first').textContent = firstPlayerName;
+            }
+            // If second player input contains only spaces, set default value
+            if (secondPlayerName.trim().length === 0 ) {
+                playerTwo.setName('Two');
+            } else {
+                playerTwo.setName(secondPlayerName);
+                playerTwoEl.querySelector('.c-player__name--second').textContent = secondPlayerName;
+            }
+
+            document.querySelector('.d-invisible').classList.remove('d-invisible');
+            document.querySelector('.c-names').classList.add('d-invisible');
+
+            gameBoard.renderGameBoard();
+            renderTurn(playerOne.getName());
+            playerOneEl.classList.add('d-playerTurn');
+
+            this.reset();
+        }
+
         const renderPlayerName = (playerName) => {
             return `<span class="${playerName === playerOne.getName() ? 
                 "c-gameBoard__cell--firstPlayer" : "c-gameBoard__cell--secondPlayer"}">${playerName}</span>`
         }
 
         const renderTurn = (playerName) => {
+            if(playerName === 'One' || playerName === 'Two') {
             turnInfo.innerHTML = `Player's ${renderPlayerName(playerName)} turn`;
+            } else {
+            turnInfo.innerHTML = `${renderPlayerName(playerName)}'s turn`;
+            }
         }
 
-        const renderWinner = (playerName) => turnInfo.innerHTML = `Player ${renderPlayerName(playerName)} won the game!`;
+        const renderWinner = (playerName) => {
+            if (playerName === 'One' || playerName === 'Two') {
+            turnInfo.innerHTML = `Player ${renderPlayerName(playerName)} won the game!`;
+            } else {
+            turnInfo.innerHTML = `${renderPlayerName(playerName)} won the game!`;
+            }
+        }
 
         const renderDraw = () => turnInfo.textContent = `Draw!`;
 
@@ -225,10 +266,7 @@ const app = (() => {
         // Events
         resetButton.addEventListener('click', resetGame);
         gameBoard.board.addEventListener('mousedown', markCellBoard);
-
-        gameBoard.renderGameBoard();
-        renderTurn(playerOne.getName());
-        playerOneEl.classList.add('d-playerTurn');
+        namesForm.addEventListener('submit', startGame);
 
     })();
 })

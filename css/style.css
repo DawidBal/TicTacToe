@@ -115,32 +115,17 @@ body {
   gap: 1rem;
 }
 
+.d-invisible {
+  display: none;
+}
+
 .cls-1 {
   fill: var(--white);
 }
 
-.c-btn {
-  padding: 0.5rem 1rem;
-  border: 2px solid var(--secondaryColor);
-  border-radius: 10px;
-  background: var(--titleColor);
-  color: var(--secondaryColor);
-  -webkit-box-shadow: 0 0.5rem var(--secondaryColor);
-          box-shadow: 0 0.5rem var(--secondaryColor);
-  -webkit-transition: -webkit-transform 200ms ease-out;
-  transition: -webkit-transform 200ms ease-out;
-  transition: transform 200ms ease-out;
-  transition: transform 200ms ease-out, -webkit-transform 200ms ease-out;
-}
-
-.c-btn:hover {
-  -webkit-transform: scale(1.1);
-          transform: scale(1.1);
-}
-
-.c-btn:active {
-  -webkit-transform: scale(1);
-          transform: scale(1);
+.d-playerTurn {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 
 .c-title {
@@ -151,6 +136,44 @@ body {
   font-size: clamp(4em, 5vw, 7rem);
   text-shadow: 0 0.5rem 0 var(--secondaryColor);
   color: var(--titleColor);
+}
+
+.c-title--medium {
+  font-size: clamp(2em, 4vw, 3rem);
+  text-shadow: 0 0.3rem 0 var(--secondaryColor);
+}
+
+.c-names {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.c-names__form {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.c-names__name {
+  color: var(--white);
+  font-size: 1.25rem;
+}
+
+.c-names__input {
+  border: 3px solid var(--secondaryColor);
+  border-radius: 5px;
+  padding: 0.25rem;
+}
+
+.c-names__input--firstPlayer {
+  border-color: var(--firstPlayer);
+}
+
+.c-names__input--secondPlayer {
+  border-color: var(--secondPlayer);
 }
 
 .c-gameBoard {
@@ -247,9 +270,31 @@ body {
   background-color: var(--secondPlayer);
 }
 
-.d-playerTurn {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
+.c-btn {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--secondaryColor);
+  border-radius: 10px;
+  background: var(--titleColor);
+  color: var(--secondaryColor);
+  -webkit-box-shadow: 0 0.5rem var(--secondaryColor);
+          box-shadow: 0 0.5rem var(--secondaryColor);
+  -webkit-transition: -webkit-transform 200ms ease-out;
+  transition: -webkit-transform 200ms ease-out;
+  transition: transform 200ms ease-out;
+  transition: transform 200ms ease-out, -webkit-transform 200ms ease-out;
+  -ms-flex-item-align: stretch;
+      -ms-grid-row-align: stretch;
+      align-self: stretch;
+}
+
+.c-btn:hover {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+
+.c-btn:active {
+  -webkit-transform: scale(1);
+          transform: scale(1);
 }
 
 @media screen and (max-width: 50rem) {
